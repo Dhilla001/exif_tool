@@ -1,0 +1,25 @@
+from hachoir.parser import createParser
+from hachoir.metadata import extractMetadata
+import sys
+
+def extract_file_metadata(file_path):
+    parser = createParser(file_path)
+    if not parser:
+        print(f"Unable to parse file: {file_path}")
+        return
+
+    with parser:
+        metadata = extractMetadata(parser)
+        if not metadata:
+            print(f"No metadata found for: {file_path}")
+            return
+
+        print(f"\nMetadata for {file_path}:\n")
+        for line in metadata.exportPlaintext():
+            print(line)
+
+if __name__ == "__main__":
+    if len(sys.argv) < 2:
+        print("Usage: python exif_tool.py <file>")
+    else:
+        extract_file_metadata(sys.argv[1])
